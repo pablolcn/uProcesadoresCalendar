@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso de Microcontroladores - Estructura Temática</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .tree {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .tree-item {
+            margin-bottom: 8px;
+        }
+
+        .tree-toggle {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .tree-toggle:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+
+        .tree-toggle.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .toggle-icon {
+            margin-right: 10px;
+            transition: transform 0.3s ease;
+            font-size: 0.8rem;
+        }
+
+        .toggle-icon.rotated {
+            transform: rotate(90deg);
+        }
+
+        .tree-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: #f8f9fa;
+            border-radius: 0 0 8px 8px;
+            margin-top: -2px;
+        }
+
+        .tree-content.expanded {
+            max-height: 3000px;
+        }
+
+        .tree-content > ul {
+            list-style: none;
+            padding: 15px 20px;
+        }
+
+        .week-item {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .week-header {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .week-header:hover {
+            background: linear-gradient(135deg, #138496 0%, #117a8b 100%);
+        }
+
+        .class-list {
+            padding: 0;
+            background: #f8f9fa;
+        }
+
+        .class-item {
+            border-bottom: 1px solid #e9ecef;
+            padding: 15px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .class-item:last-child {
+            border-bottom: none;
+        }
+
+        .class-item:hover {
+            background: #e9ecef;
+        }
+
+        .class-header {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .class-duration {
+            background: #007bff;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-left: 10px;
+        }
+
+        .class-time {
+            background: #28a745;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-left: 5px;
+        }
+
+        .class-topics {
+            margin-top: 10px;
+        }
+
+        .class-topics h4 {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .topics-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .topics-list li {
+            padding: 4px 0;
+            color: #6c757d;
+            font-size: 0.9rem;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .topics-list li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .unit-badge {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+            margin-top: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .tree-toggle {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .class-header {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📱 Curso de Microcontroladores</h1>
+            <p>Estructura Temática - 16 Semanas | 32 Clases Teóricas | 16 Laboratorios</p>
+        </div>
+        
+        <div class="content">
+            <ul class="tree">
+                <li class="tree-item">
+                    <div class="tree-toggle" onclick="toggleContent(this)">
+                        <span class="toggle-icon">▶</span>
+                        <span>📚 Programa Completo del Curso</span>
+                    </div>
+                    <div class="tree-content">
+                        <ul>
+                            <!-- Semana 1 -->
+                            <li class="week-item">
+                                <div class="week-header" onclick="toggleWeek(this)">
+                                    <span class="toggle-icon">▶</span>
+                                    <span>🗓️ Semana 1: Introducción al Curso</span>
+                                    <span class="unit-badge">Inicio</span>
+                                </div>
+                                <div class="class-list">
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🎯 Clase 1 - Jueves (Presentación)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Contenido de la sesión:</h4>
+                                            <ul class="topics-list">
+                                                <li>Presentación del curso y objetivos</li>
+                                                <li>Plan de evaluación y metodología</li>
+                                                <li>Cronograma de actividades</li>
+                                                <li>Recursos y materiales necesarios</li>
+                                                <li>Normas de laboratorio y seguridad</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🧪 Laboratorio 1 - Jueves (Familiarización)
+                                            <span class="class-duration">3 horas</span>
+                                            <span class="class-time">1:00 PM - 4:00 PM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Actividades prácticas:</h4>
+                                            <ul class="topics-list">
+                                                <li>Reconocimiento del laboratorio</li>
+                                                <li>Identificación de equipos y herramientas</li>
+                                                <li>Instalación de software de desarrollo</li>
+                                                <li>Configuración del entorno de trabajo</li>
+                                                <li><strong>Asignación:</strong> Investigación sobre microcontroladores</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            📖 Clase 2 - Viernes (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Evolución de los microprocesadores</li>
+                                                <li>Historia y desarrollo tecnológico</li>
+                                                <li>Diferencias entre microprocesadores y microcontroladores</li>
+                                                <li>Aplicaciones en la industria actual</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- Semana 2 -->
+                            <li class="week-item">
+                                <div class="week-header" onclick="toggleWeek(this)">
+                                    <span class="toggle-icon">▶</span>
+                                    <span>🗓️ Semana 2: Arquitectura Básica</span>
+                                    <span class="unit-badge">Unidad I</span>
+                                </div>
+                                <div class="class-list">
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🏗️ Clase 3 - Jueves (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Arquitectura básica de microprocesadores</li>
+                                                <li>Arquitectura básica de microcontroladores</li>
+                                                <li>Arquitectura Harvard vs Von Neumann</li>
+                                                <li>Componentes principales del MCU</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🧪 Laboratorio 2 - Jueves (Práctica)
+                                            <span class="class-duration">3 horas</span>
+                                            <span class="class-time">1:00 PM - 4:00 PM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Actividades prácticas:</h4>
+                                            <ul class="topics-list">
+                                                <li>Identificación de componentes del microcontrolador</li>
+                                                <li>Análisis de diagramas de bloques</li>
+                                                <li>Comparación práctica de arquitecturas</li>
+                                                <li>Primer contacto con el IDE</li>
+                                                <li><strong>Entrega:</strong> Investigación sobre microcontroladores</li>
+                                                <li><strong>Asignación:</strong> Análisis de arquitecturas</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🔧 Clase 4 - Viernes (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Recursos internos del MCU</li>
+                                                <li>ADC, UART, timers integrados</li>
+                                                <li>Puertos de entrada/salida</li>
+                                                <li>Osciladores y sistema de reloj</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- Semana 3 -->
+                            <li class="week-item">
+                                <div class="week-header" onclick="toggleWeek(this)">
+                                    <span class="toggle-icon">▶</span>
+                                    <span>🗓️ Semana 3: Registros y Memoria</span>
+                                    <span class="unit-badge">Unidad I</span>
+                                </div>
+                                <div class="class-list">
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            💾 Clase 5 - Jueves (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Registros de uso especial (SFR)</li>
+                                                <li>Memorias de programa y datos</li>
+                                                <li>Segmentación de memoria</li>
+                                                <li>Mapeo de registros</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🧪 Laboratorio 3 - Jueves (Práctica)
+                                            <span class="class-duration">3 horas</span>
+                                            <span class="class-time">1:00 PM - 4:00 PM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Actividades prácticas:</h4>
+                                            <ul class="topics-list">
+                                                <li>Exploración de registros SFR</li>
+                                                <li>Mapeo de memoria en el microcontrolador</li>
+                                                <li>Ejercicios de direccionamiento</li>
+                                                <li>Uso de herramientas de depuración</li>
+                                                <li><strong>Entrega:</strong> Análisis de arquitecturas</li>
+                                                <li><strong>Asignación:</strong> Manejo de registros SFR</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            ⚡ Clase 6 - Viernes (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Ciclos de instrucción</li>
+                                                <li>Ciclos de búsqueda (fetch)</li>
+                                                <li>Pipeline de instrucciones</li>
+                                                <li>Timing y sincronización</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- Semana 4 -->
+                            <li class="week-item">
+                                <div class="week-header" onclick="toggleWeek(this)">
+                                    <span class="toggle-icon">▶</span>
+                                    <span>🗓️ Semana 4: Conjunto de Instrucciones</span>
+                                    <span class="unit-badge">Unidad II</span>
+                                </div>
+                                <div class="class-list">
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            📝 Clase 7 - Jueves (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Conjunto de instrucciones del MCU</li>
+                                                <li>Clasificación de instrucciones</li>
+                                                <li>Formato de instrucciones</li>
+                                                <li>Códigos de operación (opcodes)</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🧪 Laboratorio 4 - Jueves (Práctica)
+                                            <span class="class-duration">3 horas</span>
+                                            <span class="class-time">1:00 PM - 4:00 PM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Actividades prácticas:</h4>
+                                            <ul class="topics-list">
+                                                <li>Programación básica en ensamblador</li>
+                                                <li>Uso de diferentes tipos de instrucciones</li>
+                                                <li>Análisis de códigos de operación</li>
+                                                <li>Primer programa: LED intermitente</li>
+                                                <li><strong>Entrega:</strong> Manejo de registros SFR</li>
+                                                <li><strong>Asignación:</strong> Programa básico en ensamblador</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🎯 Clase 8 - Viernes (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Modos de direccionamiento directo</li>
+                                                <li>Modo de direccionamiento inmediato</li>
+                                                <li>Modo de direccionamiento indirecto</li>
+                                                <li>Ejemplos prácticos de cada modo</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- Semana 5 -->
+                            <li class="week-item">
+                                <div class="week-header" onclick="toggleWeek(this)">
+                                    <span class="toggle-icon">▶</span>
+                                    <span>🗓️ Semana 5: Transferencia de Datos</span>
+                                    <span class="unit-badge">Unidad II</span>
+                                </div>
+                                <div class="class-list">
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🔄 Clase 9 - Jueves (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Transferencia de datos entre registros</li>
+                                                <li>Movimiento de datos en memoria</li>
+                                                <li>Flujo de programas</li>
+                                                <li>Control de ejecución</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🧪 Laboratorio 5 - Jueves (Práctica)
+                                            <span class="class-duration">3 horas</span>
+                                            <span class="class-time">1:00 PM - 4:00 PM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Actividades prácticas:</h4>
+                                            <ul class="topics-list">
+                                                <li>Programación con diferentes modos de direccionamiento</li>
+                                                <li>Ejercicios de transferencia de datos</li>
+                                                <li>Implementación de rutinas básicas</li>
+                                                <li>Depuración de código</li>
+                                                <li><strong>Entrega:</strong> Programa básico en ensamblador</li>
+                                                <li><strong>Asignación:</strong> Rutinas de transferencia de datos</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🧮 Clase 10 - Viernes (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Instrucciones aritméticas</li>
+                                                <li>Suma, resta, multiplicación</li>
+                                                <li>Manejo de carry y overflow</li>
+                                                <li>Operaciones con diferentes formatos</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- Semana 6 -->
+                            <li class="week-item">
+                                <div class="week-header" onclick="toggleWeek(this)">
+                                    <span class="toggle-icon">▶</span>
+                                    <span>🗓️ Semana 6: Instrucciones Lógicas y Booleanas</span>
+                                    <span class="unit-badge">Unidad II</span>
+                                </div>
+                                <div class="class-list">
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🔣 Clase 11 - Jueves (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Instrucciones lógicas (AND, OR, XOR)</li>
+                                                <li>Instrucciones booleanas</li>
+                                                <li>Operaciones bit a bit</li>
+                                                <li>Máscaras y filtros</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🧪 Laboratorio 6 - Jueves (Práctica)
+                                            <span class="class-duration">3 horas</span>
+                                            <span class="class-time">1:00 PM - 4:00 PM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Actividades prácticas:</h4>
+                                            <ul class="topics-list">
+                                                <li>Implementación de operaciones lógicas</li>
+                                                <li>Manipulación de bits individuales</li>
+                                                <li>Uso de máscaras para control de puertos</li>
+                                                <li>Ejercicios con operaciones booleanas</li>
+                                                <li><strong>Entrega:</strong> Rutinas de transferencia de datos</li>
+                                                <li><strong>Asignación:</strong> Programa con operaciones lógicas</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🚀 Clase 12 - Viernes (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Instrucciones de salto condicional</li>
+                                                <li>Instrucciones de salto incondicional</li>
+                                                <li>Subrutinas y llamadas</li>
+                                                <li>Stack y manejo de retornos</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- Semana 7 -->
+                            <li class="week-item">
+                                <div class="week-header" onclick="toggleWeek(this)">
+                                    <span class="toggle-icon">▶</span>
+                                    <span>🗓️ Semana 7: Herramientas de Desarrollo</span>
+                                    <span class="unit-badge">Unidad II</span>
+                                </div>
+                                <div class="class-list">
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🔨 Clase 13 - Jueves (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Compiladores y ensambladores</li>
+                                                <li>Proceso de compilación</li>
+                                                <li>Enlazadores y cargadores</li>
+                                                <li>Archivos objeto y ejecutables</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🧪 Laboratorio 7 - Jueves (Práctica)
+                                            <span class="class-duration">3 horas</span>
+                                            <span class="class-time">1:00 PM - 4:00 PM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Actividades prácticas:</h4>
+                                            <ul class="topics-list">
+                                                <li>Uso de compiladores y herramientas de desarrollo</li>
+                                                <li>Configuración de proyectos</li>
+                                                <li>Simulación y depuración avanzada</li>
+                                                <li>Análisis de archivos generados</li>
+                                                <li><strong>Entrega:</strong> Programa con operaciones lógicas</li>
+                                                <li><strong>Asignación:</strong> Proyecto con herramientas de desarrollo</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            📋 Clase 14 - Viernes (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Estructura de programas</li>
+                                                <li>Organización del código</li>
+                                                <li>Directivas del ensamblador</li>
+                                                <li>Documentación de código</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- Semana 8 -->
+                            <li class="week-item">
+                                <div class="week-header" onclick="toggleWeek(this)">
+                                    <span class="toggle-icon">▶</span>
+                                    <span>🗓️ Semana 8: Estructuras de Control</span>
+                                    <span class="unit-badge">Unidad II</span>
+                                </div>
+                                <div class="class-list">
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🔄 Clase 15 - Jueves (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Ciclos condicionales (if-then-else)</li>
+                                                <li>Implementación en ensamblador</li>
+                                                <li>Comparaciones y decisiones</li>
+                                                <li>Estructuras anidadas</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🧪 Laboratorio 8 - Jueves (Práctica)
+                                            <span class="class-duration">3 horas</span>
+                                            <span class="class-time">1:00 PM - 4:00 PM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Actividades prácticas:</h4>
+                                            <ul class="topics-list">
+                                                <li>Desarrollo de programas con ciclos y condiciones</li>
+                                                <li>Implementación de estructuras de control</li>
+                                                <li>Optimización de código</li>
+                                                <li>Pruebas y validación</li>
+                                                <li><strong>Entrega:</strong> Proyecto con herramientas de desarrollo</li>
+                                                <li><strong>Asignación:</strong> Programa con estructuras de control</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🔁 Clase 16 - Viernes (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Bucles de control (for, while)</li>
+                                                <li>Contadores y acumuladores</li>
+                                                <li>Bucles anidados</li>
+                                                <li>Optimización de bucles</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- Semana 9 -->
+                            <li class="week-item">
+                                <div class="week-header" onclick="toggleWeek(this)">
+                                    <span class="toggle-icon">▶</span>
+                                    <span>🗓️ Semana 9: Manejo de Flags y Depuración</span>
+                                    <span class="unit-badge">Unidad II</span>
+                                </div>
+                                <div class="class-list">
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🏁 Clase 17 - Jueves (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Registro de estado (STATUS)</li>
+                                                <li>Flags de carry, zero, overflow</li>
+                                                <li>Uso de flags en decisiones</li>
+                                                <li>Manipulación directa de flags</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🧪 Laboratorio 9 - Jueves (Práctica)
+                                            <span class="class-duration">3 horas</span>
+                                            <span class="class-time">1:00 PM - 4:00 PM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Actividades prácticas:</h4>
+                                            <ul class="topics-list">
+                                                <li>Programas que utilizan flags</li>
+                                                <li>Técnicas de depuración</li>
+                                                <li>Uso de simuladores</li>
+                                                <li>Análisis de errores comunes</li>
+                                                <li><strong>Entrega:</strong> Programa con estructuras de control</li>
+                                                <li><strong>Asignación:</strong> Programa con manejo de flags</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🐛 Clase 18 - Viernes (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Simulación y depuración</li>
+                                                <li>Herramientas de debugging</li>
+                                                <li>Breakpoints y step-by-step</li>
+                                                <li>Análisis de variables y registros</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- Semana 10 -->
+                            <li class="week-item">
+                                <div class="week-header" onclick="toggleWeek(this)">
+                                    <span class="toggle-icon">▶</span>
+                                    <span>🗓️ Semana 10: Programación en C y Temporizadores</span>
+                                    <span class="unit-badge">Unidad III</span>
+                                </div>
+                                <div class="class-list">
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            💻 Clase 19 - Jueves (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Programación en lenguaje C para MCU</li>
+                                                <li>Diferencias con ensamblador</li>
+                                                <li>Librerías y funciones específicas</li>
+                                                <li>Configuración de registros en C</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🧪 Laboratorio 10 - Jueves (Práctica)
+                                            <span class="class-duration">3 horas</span>
+                                            <span class="class-time">1:00 PM - 4:00 PM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Actividades prácticas:</h4>
+                                            <ul class="topics-list">
+                                                <li>Primeros programas en C</li>
+                                                <li>Configuración de puertos en C</li>
+                                                <li>Comparación ensamblador vs C</li>
+                                                <li>Rutinas eficientes en C</li>
+                                                <li><strong>Entrega:</strong> Programa con manejo de flags</li>
+                                                <li><strong>Asignación:</strong> Programa básico en C</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            ⏰ Clase 20 - Viernes (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Funcionamiento de temporizadores</li>
+                                                <li>Tipos de temporizadores (TMR0, TMR1, TMR2)</li>
+                                                <li>Registros específicos</li>
+                                                <li>Modos de conteo</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- Semana 11 -->
+                            <li class="week-item">
+                                <div class="week-header" onclick="toggleWeek(this)">
+                                    <span class="toggle-icon">▶</span>
+                                    <span>🗓️ Semana 11: Configuración y PWM</span>
+                                    <span class="unit-badge">Unidad III</span>
+                                </div>
+                                <div class="class-list">
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            ⚙️ Clase 21 - Jueves (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Configuración y programación de timers</li>
+                                                <li>Prescalers y postscalers</li>
+                                                <li>Cálculo de tiempos</li>
+                                                <li>Interrupciones por timer</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🧪 Laboratorio 11 - Jueves (Práctica)
+                                            <span class="class-duration">3 horas</span>
+                                            <span class="class-time">1:00 PM - 4:00 PM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Actividades prácticas:</h4>
+                                            <ul class="topics-list">
+                                                <li>Configuración y programación de temporizadores</li>
+                                                <li>Generación de delays precisos</li>
+                                                <li>Medición de tiempos y frecuencias</li>
+                                                <li>Uso de interrupciones por timer</li>
+                                                <li><strong>Entrega:</strong> Programa básico en C</li>
+                                                <li><strong>Asignación:</strong> Sistema con temporizadores</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            📊 Clase 22 - Viernes (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Generación de PWM</li>
+                                                <li>Duty cycle y frecuencia</li>
+                                                <li>Aplicaciones del PWM</li>
+                                                <li>Control de velocidad de motores</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- Semana 12 -->
+                            <li class="week-item">
+                                <div class="week-header" onclick="toggleWeek(this)">
+                                    <span class="toggle-icon">▶</span>
+                                    <span>🗓️ Semana 12: Sistema de Interrupciones</span>
+                                    <span class="unit-badge">Unidad IV</span>
+                                </div>
+                                <div class="class-list">
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🚨 Clase 23 - Jueves (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Tipos de interrupciones</li>
+                                                <li>Vectores de interrupción</li>
+                                                <li>Interrupciones internas y externas</li>
+                                                <li>Registro INTCON</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🧪 Laboratorio 12 - Jueves (Práctica)
+                                            <span class="class-duration">3 horas</span>
+                                            <span class="class-time">1:00 PM - 4:00 PM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Actividades prácticas:</h4>
+                                            <ul class="topics-list">
+                                                <li>Configuración de interrupciones externas</li>
+                                                <li>Manejo de interrupciones por temporizador</li>
+                                                <li>Rutinas de servicio de interrupción (ISR)</li>
+                                                <li>Desarrollo de aplicaciones reactivas</li>
+                                                <li><strong>Entrega:</strong> Sistema con temporizadores</li>
+                                                <li><strong>Asignación:</strong> Sistema basado en interrupciones</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🎯 Clase 24 - Viernes (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Configuración y habilitación</li>
+                                                <li>Prioridades de interrupciones</li>
+                                                <li>Anidamiento de interrupciones</li>
+                                                <li>Buenas prácticas en ISR</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- Semana 13 -->
+                            <li class="week-item">
+                                <div class="week-header" onclick="toggleWeek(this)">
+                                    <span class="toggle-icon">▶</span>
+                                    <span>🗓️ Semana 13: Dispositivos y Periféricos</span>
+                                    <span class="unit-badge">Unidad V</span>
+                                </div>
+                                <div class="class-list">
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🔌 Clase 25 - Jueves (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Dispositivos serie y paralelo</li>
+                                                <li>Relojes de tiempo real (RTC)</li>
+                                                <li>Memoria externa (EEPROM)</li>
+                                                <li>Acondicionamiento de señal</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🧪 Laboratorio 13 - Jueves (Práctica)
+                                            <span class="class-duration">3 horas</span>
+                                            <span class="class-time">1:00 PM - 4:00 PM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Actividades prácticas:</h4>
+                                            <ul class="topics-list">
+                                                <li>Interfaz con memoria EEPROM externa</li>
+                                                <li>Configuración de RTC</li>
+                                                <li>Acondicionamiento de señales analógicas</li>
+                                                <li>Uso de amplificadores operacionales</li>
+                                                <li><strong>Entrega:</strong> Sistema basado en interrupciones</li>
+                                                <li><strong>Asignación:</strong> Sistema con dispositivos externos</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🖥️ Clase 26 - Viernes (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Teclados matriciales</li>
+                                                <li>Visualizadores LCD</li>
+                                                <li>Sensores analógicos y digitales</li>
+                                                <li>Adaptación de niveles de señal</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- Semana 14 -->
+                            <li class="week-item">
+                                <div class="week-header" onclick="toggleWeek(this)">
+                                    <span class="toggle-icon">▶</span>
+                                    <span>🗓️ Semana 14: Interfaces de Usuario</span>
+                                    <span class="unit-badge">Unidad V</span>
+                                </div>
+                                <div class="class-list">
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            ⌨️ Clase 27 - Jueves (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Diseño de interfaces de usuario</li>
+                                                <li>Integración de múltiples periféricos</li>
+                                                <li>Gestión de recursos del sistema</li>
+                                                <li>Optimización de rendimiento</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🧪 Laboratorio 14 - Jueves (Práctica)
+                                            <span class="class-duration">3 horas</span>
+                                            <span class="class-time">1:00 PM - 4:00 PM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Actividades prácticas:</h4>
+                                            <ul class="topics-list">
+                                                <li>Interfaz con teclado matricial 4x4</li>
+                                                <li>Control de display LCD 16x2</li>
+                                                <li>Lectura de sensores analógicos (ADC)</li>
+                                                <li>Sistema completo con múltiples periféricos</li>
+                                                <li><strong>Entrega:</strong> Sistema con dispositivos externos</li>
+                                                <li><strong>Asignación:</strong> Sistema con interfaz completa</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            📡 Clase 28 - Viernes (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Conceptos básicos de comunicación serial</li>
+                                                <li>Estándar RS232</li>
+                                                <li>Protocolo UART</li>
+                                                <li>Configuración de puertos seriales</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- Semana 15 -->
+                            <li class="week-item">
+                                <div class="week-header" onclick="toggleWeek(this)">
+                                    <span class="toggle-icon">▶</span>
+                                    <span>🗓️ Semana 15: Comunicación Serial Avanzada</span>
+                                    <span class="unit-badge">Unidad VI</span>
+                                </div>
+                                <div class="class-list">
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🌐 Clase 29 - Jueves (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Protocolos I2C y SPI</li>
+                                                <li>Comunicación entre microcontroladores</li>
+                                                <li>Rutinas síncronas y asíncronas</li>
+                                                <li>Buffers y sincronización</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🧪 Laboratorio 15 - Jueves (Práctica)
+                                            <span class="class-duration">3 horas</span>
+                                            <span class="class-time">1:00 PM - 4:00 PM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Actividades prácticas:</h4>
+                                            <ul class="topics-list">
+                                                <li>Comunicación UART con PC</li>
+                                                <li>Protocolo I2C con memoria EEPROM</li>
+                                                <li>Comunicación SPI con sensores</li>
+                                                <li>Desarrollo de protocolos personalizados</li>
+                                                <li><strong>Entrega:</strong> Sistema con interfaz completa</li>
+                                                <li><strong>Asignación:</strong> Sistema de comunicación completo</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🔗 Clase 30 - Viernes (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Diseño de rutinas de comunicación</li>
+                                                <li>Manejo de errores en comunicación</li>
+                                                <li>Protocolos de control de flujo</li>
+                                                <li>Integración de sistemas distribuidos</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- Semana 16 -->
+                            <li class="week-item">
+                                <div class="week-header" onclick="toggleWeek(this)">
+                                    <span class="toggle-icon">▶</span>
+                                    <span>🗓️ Semana 16: Proyecto Final</span>
+                                    <span class="unit-badge">Evaluación</span>
+                                </div>
+                                <div class="class-list">
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🚀 Clase 31 - Jueves (Teoría)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Temas a cubrir:</h4>
+                                            <ul class="topics-list">
+                                                <li>Revisión general del curso</li>
+                                                <li>Integración de todos los conceptos</li>
+                                                <li>Metodologías de desarrollo</li>
+                                                <li>Perspectivas futuras y aplicaciones industriales</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🧪 Laboratorio 16 - Jueves (Proyecto Final)
+                                            <span class="class-duration">3 horas</span>
+                                            <span class="class-time">1:00 PM - 4:00 PM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Actividades finales:</h4>
+                                            <ul class="topics-list">
+                                                <li>Presentación de proyectos finales</li>
+                                                <li>Demostración de funcionalidades</li>
+                                                <li>Evaluación técnica del proyecto</li>
+                                                <li>Documentación técnica completa</li>
+                                                <li><strong>Entrega:</strong> Sistema de comunicación completo</li>
+                                                <li><strong>Presentación:</strong> Proyecto integrador final</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="class-item">
+                                        <div class="class-header">
+                                            🎓 Clase 32 - Viernes (Evaluación Final)
+                                            <span class="class-duration">2 horas</span>
+                                            <span class="class-time">8:00 AM - 10:00 AM</span>
+                                        </div>
+                                        <div class="class-topics">
+                                            <h4>Actividades de cierre:</h4>
+                                            <ul class="topics-list">
+                                                <li>Evaluación final teórica</li>
+                                                <li>Defensa de proyectos</li>
+                                                <li>Retroalimentación del curso</li>
+                                                <li>Entrega de calificaciones finales</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleContent(element) {
+            const content = element.nextElementSibling;
+            const icon = element.querySelector('.toggle-icon');
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                icon.classList.remove('rotated');
+                element.classList.remove('active');
+            } else {
+                content.classList.add('expanded');
+                icon.classList.add('rotated');
+                element.classList.add('active');
+            }
+        }
+
+        function toggleWeek(element) {
+            const classList = element.nextElementSibling;
+            const icon = element.querySelector('.toggle-icon');
+            
+            if (classList.style.display === 'none' || classList.style.display === '') {
+                classList.style.display = 'block';
+                icon.classList.add('rotated');
+                element.style.background = 'linear-gradient(135deg, #138496 0%, #117a8b 100%)';
+            } else {
+                classList.style.display = 'none';
+                icon.classList.remove('rotated');
+                element.style.background = 'linear-gradient(135deg, #17a2b8 0%, #138496 100%)';
+            }
+            
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const totalWeeks = document.querySelectorAll('.week-item').length;
+            const expandedWeeks = document.querySelectorAll('.class-list[style*="block"]').length;
+            const progressPercentage = (expandedWeeks / totalWeeks) * 100;
+            
+            document.getElementById('progressFill').style.width = progressPercentage + '%';
+        }
+
+        // Initialize all weeks as collapsed
+        document.addEventListener('DOMContentLoaded', function() {
+            const classLists = document.querySelectorAll('.class-list');
+            classLists.forEach(classList => {
+                classList.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
